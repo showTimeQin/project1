@@ -1,0 +1,46 @@
+package cn.qin.service.impl;
+
+import java.beans.Transient;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import cn.qin.mapper.TbItemMapper;
+import cn.qin.pojo.TbItem;
+import cn.qin.pojo.TbItemExample;
+import cn.qin.pojo.TbItemExample.Criteria;
+import cn.qin.service.ItemService;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * 商品管理Service
+ * <p>Title: ItemServiceImpl</p>
+ * <p>Description: </p>
+ * <p>Company: www.itcast.cn</p> 
+ * @version 1.0
+ */
+@Service
+public class ItemServiceImpl implements ItemService {
+
+	@Autowired
+	private TbItemMapper itemMapper;
+	
+	@Override
+	@Transactional
+	public TbItem getItemById(long itemId) {
+		//根据主键查询
+		//TbItem tbItem = itemMapper.selectByPrimaryKey(itemId);
+		TbItemExample example = new TbItemExample();
+		Criteria criteria = example.createCriteria();
+		//设置查询条件
+		criteria.andIdEqualTo(itemId);
+		//执行查询
+		List<TbItem> list = itemMapper.selectByExample(example);
+		if (list != null && list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
+	}
+
+}
